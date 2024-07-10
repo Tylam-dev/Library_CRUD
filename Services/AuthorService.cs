@@ -29,12 +29,11 @@ public class AuthorService : IAuthorService
     }
     public async Task Save(AuthorPostDto request)
     {
-        Author? Author = _Mapper.Map<Author>(request);
-        if (Author != null)
-        {
-            await _LibraryDb.AddAsync(Author);
-            await _LibraryDb.SaveChangesAsync();
-        }
+        Author author = new Author();
+        _Mapper.Map(request, author);
+        author.AuthorId = Guid.NewGuid();
+        await _LibraryDb.AddAsync(author);
+        await _LibraryDb.SaveChangesAsync();
     } 
     public async Task Update(Guid id, AuthorUpdateDto request)
     {

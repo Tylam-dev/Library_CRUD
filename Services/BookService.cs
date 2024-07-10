@@ -29,12 +29,11 @@ public class BookService : IBookService
     }
     public async Task Save(BookPostDto request)
     {
-        Book? book = _Mapper.Map<Book>(request);
-        if (book != null)
-        {
-            await _LibraryDb.AddAsync(book);
-            await _LibraryDb.SaveChangesAsync();
-        }
+        Book book = new Book();
+        _Mapper.Map(request, book);
+        book.BookId = Guid.NewGuid();
+        await _LibraryDb.AddAsync(book);
+        await _LibraryDb.SaveChangesAsync();
     } 
     public async Task Update(Guid id, BookUpdateDto request)
     {

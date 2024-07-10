@@ -10,6 +10,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddNpgsql<LibraryContext>(builder.Configuration.GetConnectionString("library_db"));
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IBorrowService, BorrowService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
 
 var mapperConfig = new MapperConfiguration( m => 
 {

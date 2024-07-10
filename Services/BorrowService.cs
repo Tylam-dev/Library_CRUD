@@ -29,12 +29,11 @@ public class BorrowService : IBorrowService
     }
     public async Task Save(BorrowPostDto request)
     {
-        Borrow? Borrow = _Mapper.Map<Borrow>(request);
-        if (Borrow != null)
-        {
-            await _LibraryDb.AddAsync(Borrow);
-            await _LibraryDb.SaveChangesAsync();
-        }
+        Borrow borrow = new Borrow();
+        _Mapper.Map(request, borrow);
+        borrow.BorrowId = Guid.NewGuid();
+        await _LibraryDb.AddAsync(borrow);
+        await _LibraryDb.SaveChangesAsync();
     } 
     public async Task Update(Guid id, BorrowUpdateDto request)
     {
