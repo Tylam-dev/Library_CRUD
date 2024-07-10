@@ -1,4 +1,6 @@
+using AutoMapper;
 using Library_CRUD.Context;
+using Library_CRUD.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddNpgsql<LibraryContext>(builder.Configuration.GetConnectionString("library_db"));
+builder.Services.AddScoped<IBookService, BookService>();
+
+var mapperConfig = new MapperConfiguration( m => 
+{
+    m.AddProfile(new MappingProfile());
+});
+IMapper mapper = mapperConfig.CreateMapper();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -15,6 +25,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 
