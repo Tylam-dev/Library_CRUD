@@ -31,13 +31,12 @@ public class AuthorController: ControllerBase
     public async Task<IActionResult> Post([FromBody] AuthorPostDto request)
     {
         await _authorService.Save(request);
-        return Ok();
+        return  Ok();
     }
-    //Probar este Dto: verificar el mappert
     [HttpPut("{id}")]
-    public IActionResult Put(Guid id, [FromBody] AuthorUpdateDto request)
+    public async Task<IActionResult> Put(Guid id, [FromBody] AuthorUpdateDto request)
     {
-        _authorService.Update(id, request);
+        await _authorService.Update(id, request);
         return Ok();
     }
     [HttpDelete("{id}")]

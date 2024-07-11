@@ -4,9 +4,9 @@ namespace Library_CRUD.Models;
 public class Book
 {
     public Guid BookId {get;set;}
-    public string Title {get;set;} = string.Empty;
-    public string ISBN {get;set;} = string.Empty;
-    public DateOnly PublicationDate {get;set;}
+    public string? Title {get;set;} = null;
+    public string? ISBN {get;set;} = null;
+    public DateOnly? PublicationDate {get;set;} = null;
     public Guid AuthorId {get;set;}
     public virtual ICollection<Borrow> Borrows {get;set;} = new List<Borrow>();
     public virtual ICollection<BorrowsBooks> BorrowsBooks {get;set;} = new List<BorrowsBooks>();

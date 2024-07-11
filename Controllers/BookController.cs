@@ -1,4 +1,5 @@
 using Library_CRUD.Dtos;
+using Library_CRUD.Models;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -6,38 +7,42 @@ using Microsoft.AspNetCore.Mvc;
 public class BookController: ControllerBase
 {
     public IBookService _bookService;
-    public BookController(IBookService bookService)
+    public BookController(IBookService BookService)
     {
-        _bookService = bookService;
+        _bookService = BookService;
     }
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        _bookService.GetAll();
-        return Ok();
+        IEnumerable<Book> Books = await _bookService.GetAll();
+        return Ok(Books);
     }
     [HttpGet("{id}")]
-    public IActionResult GetOne(Guid id)
+    public async Task<IActionResult> GetOne(Guid id)
     {
-        _bookService.GetOne(id);
-        return Ok();
+        Book? Book = await _bookService.GetOne(id);
+        if ( Book != null)
+        {
+            return Ok(Book);
+        }
+        return NotFound();
     }
     [HttpPost]
-    public IActionResult Post([FromBody] BookPostDto request)
+    public async Task<IActionResult> Post([FromBody] BookPostDto request)
     {
-        _bookService.Save(request);
-        return Ok();
+        await _bookService.Save(request);
+        return  Ok();
     }
     [HttpPut("{id}")]
-    public IActionResult Put(Guid id, [FromBody] BookUpdateDto request)
+    public async Task<IActionResult> Put(Guid id, [FromBody] BookUpdateDto request)
     {
-        _bookService.Update(id, request);
+        await _bookService.Update(id, request);
         return Ok();
     }
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        _bookService.Delete(id);
+        await _bookService.Delete(id);
         return Ok();
     }
 }

@@ -1,4 +1,5 @@
 using Library_CRUD.Dtos;
+using Library_CRUD.Models;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -11,33 +12,37 @@ public class BorrowController: ControllerBase
         _borrowService = BorrowService;
     }
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        _borrowService.GetAll();
-        return Ok();
+        IEnumerable<Borrow> Borrows = await _borrowService.GetAll();
+        return Ok(Borrows);
     }
     [HttpGet("{id}")]
-    public IActionResult GetOne(Guid id)
+    public async Task<IActionResult> GetOne(Guid id)
     {
-        _borrowService.GetOne(id);
-        return Ok();
+        Borrow? Borrow = await _borrowService.GetOne(id);
+        if ( Borrow != null)
+        {
+            return Ok(Borrow);
+        }
+        return NotFound();
     }
     [HttpPost]
-    public IActionResult Post([FromBody] BorrowPostDto request)
+    public async Task<IActionResult> Post([FromBody] BorrowPostDto request)
     {
-        _borrowService.Save(request);
-        return Ok();
+        await _borrowService.Save(request);
+        return  Ok();
     }
     [HttpPut("{id}")]
-    public IActionResult Put(Guid id, [FromBody] BorrowUpdateDto request)
+    public async Task<IActionResult> Put(Guid id, [FromBody] BorrowUpdateDto request)
     {
-        _borrowService.Update(id, request);
+        await _borrowService.Update(id, request);
         return Ok();
     }
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        _borrowService.Delete(id);
+        await _borrowService.Delete(id);
         return Ok();
     }
 }

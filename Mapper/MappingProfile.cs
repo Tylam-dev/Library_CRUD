@@ -9,10 +9,10 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<AuthorPostDto, Author>();
-        CreateMap<AuthorUpdateDto, Author>();
+        CreateMap<AuthorUpdateDto, Author>().ForAllMembers((opts) => opts.Condition((src, dest, srcMember) => srcMember != null));
         CreateMap<BookPostDto, Book>();
         CreateMap<BookUpdateDto, Book>();
-        CreateMap<AuthorPostDto, Author>();
-        CreateMap<AuthorUpdateDto, Author>();
+        CreateMap<BorrowPostDto, Borrow>();
+        CreateMap<BorrowUpdateDto, Borrow>();
     }
 }
