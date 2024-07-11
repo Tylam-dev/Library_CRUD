@@ -26,10 +26,11 @@ namespace Library_CRUD.Migrations
                 {
                     b.Property<Guid>("AuthorId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("author_id");
 
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateOnly>("BirthDate")
+                        .HasColumnType("date")
                         .HasColumnName("birth_date");
 
                     b.Property<DateTime>("CreationDate")
@@ -40,16 +41,18 @@ namespace Library_CRUD.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
                         .HasColumnName("last_name");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
                         .HasColumnName("name");
 
                     b.Property<DateTime>("UpdateDate")
-                        .ValueGeneratedOnUpdate()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -67,7 +70,8 @@ namespace Library_CRUD.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("AuthorId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("book_id");
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
@@ -79,8 +83,8 @@ namespace Library_CRUD.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("PublicationDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("PublicationDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -88,7 +92,7 @@ namespace Library_CRUD.Migrations
                         .HasColumnName("title");
 
                     b.Property<DateTime>("UpdateDate")
-                        .ValueGeneratedOnUpdate()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -105,7 +109,8 @@ namespace Library_CRUD.Migrations
                 {
                     b.Property<Guid>("BorrowId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("borrow_id");
 
                     b.Property<Guid>("BookId")
                         .HasColumnType("uuid");
@@ -121,10 +126,11 @@ namespace Library_CRUD.Migrations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime>("ReturnDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("return_date");
 
                     b.Property<DateTime>("UpdateDate")
-                        .ValueGeneratedOnUpdate()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");

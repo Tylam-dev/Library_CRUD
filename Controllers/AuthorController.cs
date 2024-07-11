@@ -1,4 +1,5 @@
 using Library_CRUD.Dtos;
+using Library_CRUD.Models;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -11,23 +12,28 @@ public class AuthorController: ControllerBase
         _authorService = AuthorService;
     }
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        _authorService.GetAll();
-        return Ok();
+        IEnumerable<Author> authors = await _authorService.GetAll();
+        return Ok(authors);
     }
     [HttpGet("{id}")]
-    public IActionResult GetOne(Guid id)
+    public async Task<IActionResult> GetOne(Guid id)
     {
-        _authorService.GetOne(id);
-        return Ok();
+        Author? author = await _authorService.GetOne(id);
+        if ( author != null)
+        {
+            return Ok(author);
+        }
+        return NotFound();
     }
     [HttpPost]
-    public IActionResult Post([FromBody] AuthorPostDto request)
+    public async Task<IActionResult> Post([FromBody] AuthorPostDto request)
     {
-        _authorService.Save(request);
+        await _authorService.Save(request);
         return Ok();
     }
+    //Probar este Dto: verificar el mappert
     [HttpPut("{id}")]
     public IActionResult Put(Guid id, [FromBody] AuthorUpdateDto request)
     {
@@ -35,9 +41,9 @@ public class AuthorController: ControllerBase
         return Ok();
     }
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        _authorService.Delete(id);
+        await _authorService.Delete(id);
         return Ok();
     }
 }

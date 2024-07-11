@@ -2,19 +2,23 @@ using Library_CRUD.Context;
 using Library_CRUD.Models;
 using Library_CRUD.Dtos;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 public class AuthorService : IAuthorService
 {
     private readonly LibraryContext _LibraryDb;
     private readonly IMapper _Mapper;
-    public AuthorService(LibraryContext libraryDb, IMapper mapper)
+    private readonly ILogger _Logger;
+    public AuthorService(LibraryContext libraryDb, IMapper mapper, ILogger<AuthorService> logger)
     {
         _LibraryDb = libraryDb;
         _Mapper = mapper;
+        _Logger = logger;
     }
-    public IEnumerable<Author> GetAll()
+    public async Task<IEnumerable<Author>> GetAll()
     {
-        return _LibraryDb.Authors;
+        return await _LibraryDb.Authors.ToListAsync();
     }
 
     public async Task<Author?> GetOne(Guid id)
@@ -23,16 +27,16 @@ public class AuthorService : IAuthorService
         if (AuthorFound != null)
         {
             return AuthorFound;
+        }else {
+            Console.WriteLine("Author does not exist");
+            return null;
         }
-        Console.WriteLine("Author does not exist");
-        return null;
     }
     public async Task Save(AuthorPostDto request)
     {
-        Author author = new Author();
-        _Mapper.Map(request, author);
-        author.AuthorId = Guid.NewGuid();
-        await _LibraryDb.AddAsync(author);
+        
+        Author newAuthor = _Mapper.Map<Author>(request);
+        await _LibraryDb.AddAsync(newAuthor);
         await _LibraryDb.SaveChangesAsync();
     } 
     public async Task Update(Guid id, AuthorUpdateDto request)
@@ -42,9 +46,10 @@ public class AuthorService : IAuthorService
         {
             _Mapper.Map(request, currentAuthor);
             await _LibraryDb.SaveChangesAsync();
-        }
+        }else {
             Console.WriteLine($"Error: Author with id {id} does not exist");
             return;
+        }
     }
     public async Task Delete(Guid id)
     {
@@ -52,15 +57,17 @@ public class AuthorService : IAuthorService
         if(currentAuthor != null)
         {
             _LibraryDb.Authors.Remove(currentAuthor);
+            await _LibraryDb.SaveChangesAsync();
+        }else {
+            Console.WriteLine($"Error: Author with id {id} does not exist");
+            return;
         }
-        Console.WriteLine($"Error: Author with id {id} does not exist");
-        return;
     }
 }
 
 public interface IAuthorService
 {
-    public IEnumerable<Author> GetAll();
+    public Task<IEnumerable<Author>> GetAll();
     public Task<Author?> GetOne(Guid id);
     public Task Save(AuthorPostDto request);
     public Task Update(Guid id, AuthorUpdateDto request);
