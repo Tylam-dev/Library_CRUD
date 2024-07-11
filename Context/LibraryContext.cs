@@ -39,18 +39,7 @@ public class LibraryContext : DbContext
             borrow.Property(p => p.BorrowId).HasColumnName("borrow_id");
             borrow.Property(p => p.BorrowDate).HasColumnName("borrow_date").IsRequired();
             borrow.Property(p => p.ReturnDate).HasColumnName("return_date").IsRequired();
-            borrow.HasMany(p => p.Books).WithMany(p => p.Borrows).UsingEntity<BorrowsBooks>(
-                j => j
-                     .HasOne(p => p.Book)
-                     .WithMany(p => p.BorrowsBooks)
-                     .HasForeignKey(p => p.BookId)
-                     .IsRequired(),
-                j => j
-                     .HasOne(p => p.Borrow)
-                     .WithMany(p => p.BorrowsBooks)
-                     .HasForeignKey(p => p.BorrowId)
-                     .IsRequired()
-            );
+            borrow.HasMany(p => p.Books).WithMany(p => p.Borrows).UsingEntity<BorrowsBooks>(p => p.ToTable("borrows_books"));
             borrow.Property(p => p.CreationDate).ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP").HasColumnName("creation_date");
             borrow.Property(p => p.UpdateDate).ValueGeneratedOnAddOrUpdate().HasDefaultValueSql("CURRENT_TIMESTAMP").HasColumnName("update_date");
         });

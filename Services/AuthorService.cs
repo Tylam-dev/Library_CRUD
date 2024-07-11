@@ -3,9 +3,6 @@ using Library_CRUD.Models;
 using Library_CRUD.Dtos;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 public class AuthorService : IAuthorService
 {

@@ -29,7 +29,8 @@ namespace Library_CRUD.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("author_id");
 
-                    b.Property<DateOnly>("BirthDate")
+                    b.Property<DateOnly?>("BirthDate")
+                        .IsRequired()
                         .HasColumnType("date")
                         .HasColumnName("birth_date");
 
@@ -83,7 +84,8 @@ namespace Library_CRUD.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("PublicationDate")
+                    b.Property<DateOnly?>("PublicationDate")
+                        .IsRequired()
                         .HasColumnType("date");
 
                     b.Property<string>("Title")
@@ -156,7 +158,7 @@ namespace Library_CRUD.Migrations
 
                     b.HasIndex("BorrowId");
 
-                    b.ToTable("BorrowsBooks");
+                    b.ToTable("borrows_books", (string)null);
                 });
 
             modelBuilder.Entity("Library_CRUD.Models.Book", b =>
