@@ -14,9 +14,13 @@ public class BookService : IBookService
         _Mapper = mapper;
         _Logger = logger;
     }
-    public async Task<IEnumerable<Book>> GetAll()
+    public async Task<IEnumerable<Book>> GetAll(string? author)
     {
-        return await _LibraryDb.Books.ToListAsync();
+        if (author != null)
+        {   
+            return await _LibraryDb.Books.Include(p => p.Author).Where(p => p.Author.Name == author).ToListAsync();
+        }
+        return await _LibraryDb.Books.Include(p => p.Author).ToListAsync();
     }
 
     public async Task<Book?> GetOne(Guid id)
@@ -33,8 +37,13 @@ public class BookService : IBookService
     public async Task Save(BookPostDto request)
     {
         Book newBook = _Mapper.Map<Book>(request);
-        await _LibraryDb.AddAsync(newBook);
-        await _LibraryDb.SaveChangesAsync();
+        Author? author = await _LibraryDb.Authors.FindAsync(newBook.AuthorId);
+        if (author != null)
+        {
+            newBook.Author = author;
+            await _LibraryDb.AddAsync(newBook);
+            await _LibraryDb.SaveChangesAsync();
+        }
     } 
     public async Task Update(Guid id, BookUpdateDto request)
     {
@@ -64,7 +73,7 @@ public class BookService : IBookService
 
 public interface IBookService
 {
-    public Task<IEnumerable<Book>> GetAll();
+    public Task<IEnumerable<Book>> GetAll(string? author);
     public Task<Book?> GetOne(Guid id);
     public Task Save(BookPostDto request);
     public Task Update(Guid id, BookUpdateDto request);

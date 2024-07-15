@@ -3,6 +3,7 @@ using Library_CRUD.Models;
 using Library_CRUD.Dtos;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 
 public class AuthorService : IAuthorService
 {
@@ -17,7 +18,7 @@ public class AuthorService : IAuthorService
     }
     public async Task<IEnumerable<Author>> GetAll()
     {
-        return await _LibraryDb.Authors.ToListAsync();
+        return await _LibraryDb.Authors.Include(p => p.Book).ToListAsync();
     }
 
     public async Task<Author?> GetOne(Guid id)

@@ -25,7 +25,7 @@ public class LibraryContext : DbContext
         modelBuilder.Entity<Book>(book => {
             book.ToTable("books");
             book.HasKey(p => p.BookId).HasName("book_id");
-            book.Property(p => p.AuthorId).HasColumnName("book_id");
+            book.Property(p => p.AuthorId).HasColumnName("author_id");
             book.Property(p => p.Title).HasColumnName("title").IsRequired();
             book.Property(p => p.PublicationDate).IsRequired();
             book.Property(p => p.ISBN).IsRequired();
@@ -38,7 +38,7 @@ public class LibraryContext : DbContext
             borrow.HasKey(p => p.BorrowId).HasName("borrow_id");
             borrow.Property(p => p.BorrowId).HasColumnName("borrow_id");
             borrow.Property(p => p.BorrowDate).HasColumnName("borrow_date").IsRequired();
-            borrow.Property(p => p.ReturnDate).HasColumnName("return_date").IsRequired();
+            borrow.Property(p => p.ReturnDate).HasColumnName("return_date").IsRequired(false);
             borrow.HasMany(p => p.Books).WithMany(p => p.Borrows).UsingEntity<BorrowsBooks>(p => p.ToTable("borrows_books"));
             borrow.Property(p => p.CreationDate).ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP").HasColumnName("creation_date");
             borrow.Property(p => p.UpdateDate).ValueGeneratedOnAddOrUpdate().HasDefaultValueSql("CURRENT_TIMESTAMP").HasColumnName("update_date");

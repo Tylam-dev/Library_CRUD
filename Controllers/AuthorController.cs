@@ -20,7 +20,7 @@ public class AuthorController: ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOne(Guid id)
     {
-        Author? author = await _authorService.GetOne(id);
+        Author author = await _authorService.GetOne(id);
         if ( author != null)
         {
             return Ok(author);

@@ -72,7 +72,7 @@ namespace Library_CRUD.Migrations
 
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid")
-                        .HasColumnName("book_id");
+                        .HasColumnName("author_id");
 
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
@@ -114,9 +114,6 @@ namespace Library_CRUD.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("borrow_id");
 
-                    b.Property<Guid>("BookId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("BorrowDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("borrow_date");
@@ -127,7 +124,7 @@ namespace Library_CRUD.Migrations
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("return_date");
 

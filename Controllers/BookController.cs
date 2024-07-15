@@ -12,9 +12,9 @@ public class BookController: ControllerBase
         _bookService = BookService;
     }
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] string? author)
     {
-        IEnumerable<Book> Books = await _bookService.GetAll();
+        IEnumerable<Book> Books = await _bookService.GetAll(author);
         return Ok(Books);
     }
     [HttpGet("{id}")]
