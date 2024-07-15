@@ -148,9 +148,6 @@ namespace Library_CRUD.Migrations
                     b.Property<Guid>("BorrowId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("BorrowBookId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("BookId", "BorrowId");
 
                     b.HasIndex("BorrowId");

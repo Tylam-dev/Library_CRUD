@@ -3,8 +3,6 @@ using Library_CRUD.Models;
 using Library_CRUD.Dtos;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 public class BorrowService : IBorrowService
 {
@@ -56,11 +54,31 @@ public class BorrowService : IBorrowService
     } 
     public async Task Update(Guid id, BorrowUpdateDto request)
     {
-        Borrow? currentBorrow = await _LibraryDb.Borrows.FindAsync(id);
+        Borrow? currentBorrow = await _LibraryDb.Borrows.Include(p => p.Books).FirstOrDefaultAsync(p => p.BorrowId == id);
+        List<Book> newListBook = new List<Book>();
         if(currentBorrow != null)
         {
             _Mapper.Map(request, currentBorrow);
-            await _LibraryDb.SaveChangesAsync();
+            if(request.BookIds != null)
+            {
+                foreach(Guid idBook in request.BookIds)
+                {
+                Book? bookFound =  await _LibraryDb.Books.FindAsync(idBook);
+                if (bookFound == null)
+                {
+                    throw new InvalidOperationException($"A borrow with id {idBook} does not exist");
+                }else
+                {
+                 newListBook.Add(bookFound);
+                };
+                }
+                if (newListBook.Count() == request.BookIds.Count())
+                {
+                    currentBorrow.Books.Clear();
+                    currentBorrow.Books = newListBook;
+                    await _LibraryDb.SaveChangesAsync();
+                }
+            }
         }else {
             Console.WriteLine($"Error: Borrow with id {id} does not exist");
             return;

@@ -13,6 +13,6 @@ public class MappingProfile : Profile
         CreateMap<BookPostDto, Book>();
         CreateMap<BookUpdateDto, Book>();
         CreateMap<BorrowPostDto, Borrow>();
-        CreateMap<BorrowUpdateDto, Borrow>();
+        CreateMap<BorrowUpdateDto, Borrow>().ForAllMembers((opts) => opts.Condition((src, dest, srcMember) => srcMember != null));
     }
 }
